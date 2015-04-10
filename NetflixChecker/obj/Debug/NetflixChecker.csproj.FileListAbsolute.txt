@@ -7,3 +7,12 @@ C:\Users\Jack\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\Net
 C:\Users\Jack\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.csproj.GenerateResource.Cache
 C:\Users\Jack\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.exe
 C:\Users\Jack\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.pdb
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\bin\Debug\NetflixChecker.exe.config
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.exe
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.pdb
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\bin\Debug\NetflixChecker.exe
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\bin\Debug\NetflixChecker.pdb
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.csprojResolveAssemblyReference.cache
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.Form1.resources
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.Properties.Resources.resources
+C:\Users\Jryder\Dropbox\My C# Projects\NetflixChecker\NetflixChecker\obj\Debug\NetflixChecker.csproj.GenerateResource.Cache
