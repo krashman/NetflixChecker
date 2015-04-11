@@ -51,7 +51,7 @@
             // 
             // adder
             // 
-            this.adder.Location = new System.Drawing.Point(357, 26);
+            this.adder.Location = new System.Drawing.Point(357, 12);
             this.adder.Name = "adder";
             this.adder.Size = new System.Drawing.Size(103, 46);
             this.adder.TabIndex = 1;
@@ -61,7 +61,7 @@
             // 
             // scanner
             // 
-            this.scanner.Location = new System.Drawing.Point(357, 140);
+            this.scanner.Location = new System.Drawing.Point(357, 126);
             this.scanner.Name = "scanner";
             this.scanner.Size = new System.Drawing.Size(103, 46);
             this.scanner.TabIndex = 2;
@@ -82,7 +82,7 @@
             // button1
             // 
             this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(357, 197);
+            this.button1.Location = new System.Drawing.Point(357, 183);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(103, 46);
             this.button1.TabIndex = 5;
@@ -93,7 +93,7 @@
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(357, 83);
+            this.button2.Location = new System.Drawing.Point(357, 69);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(103, 46);
             this.button2.TabIndex = 6;
@@ -110,6 +110,7 @@
             this.webBrowser1.TabIndex = 7;
             this.webBrowser1.Url = new System.Uri("http://netflix.com/login", System.UriKind.Absolute);
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
+            this.webBrowser1.ProgressChanged += new System.Windows.Forms.WebBrowserProgressChangedEventHandler(this.webBrowser1_ProgressChanged);
             // 
             // timerLogin
             // 
@@ -120,7 +121,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(724, 268);
+            this.ClientSize = new System.Drawing.Size(724, 269);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -129,6 +130,8 @@
             this.Controls.Add(this.adder);
             this.Controls.Add(this.textBox1);
             this.Name = "Form1";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Netflix Account Scanner";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
